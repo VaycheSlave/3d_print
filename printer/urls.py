@@ -1,0 +1,83 @@
+from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
+from .views import (
+    ControlPrinterAPIView,
+    ThreeDPrinterListCreateView,
+    printer_info,
+    delete_printer,
+    web,
+    select_printer,
+    send_command,
+    control_printer,
+    add_printer,
+    print_gcode,
+    success_printer,
+    orders_view,
+    admin_select_printer,
+    admin_add_3d_printer,
+    admin_print_gcode,
+    success_print,
+    update_order,
+    print_order,
+    kab_print,
+    add_3d_printerUser,
+    telegram_auth,
+    upload_file_view, printer_action, printers_user, orders_user, printing, management, add_3d_model, submit_model,
+    choose_printer, order_detail, contact, update_order_view, profile_view, chat_view, send_message,
+    get_messages, view_gcode, send_to_printer
+)
+
+app_name = 'printer'
+
+urlpatterns = [
+    path('control_printer/', ControlPrinterAPIView.as_view(), name='control-printer-api'),
+    path('printers/', ThreeDPrinterListCreateView.as_view(), name='printer-list-create'),
+    path('select_printer/', select_printer, name='select_printer'),
+    path('send_command/<int:printer_id>/', send_command, name='send-command'),
+    path('printer_info/<int:printer_id>/', printer_info, name='printer_info'),
+    path('control_printer/', control_printer, name='control_printer'),
+    path('add_printer/', add_printer, name='add_printer'),
+    path('print_gcode/', print_gcode, name='print_gcode'),
+    path("success_printer/", success_printer, name='success_printer'),
+    path('delete-printer/<int:printer_id>/', delete_printer, name='delete_printer'),
+    path('web/', web, name='web'),
+    path('orders/', orders_view, name='orders'),
+    path('select_printer/', admin_select_printer, name='admin_select_printer'),
+    path('add_3d_printer/', admin_add_3d_printer, name='admin_add_3d_printer'),
+    path('print_gcode/', admin_print_gcode, name='admin_print_gcode'),
+    path('success_print/', success_print, name='success_print'),
+    path('update_order/', update_order, name='update_order'),
+    path('print-order/', print_order, name='print_order'),
+    path('add_3d_printer/', add_3d_printerUser, name='add_3d_printer'),
+    path('kab_print', kab_print, name='kab_print'),
+    path('telegram-auth/', telegram_auth, name='telegram_auth'),
+    path('upload/', upload_file_view, name='upload_file'),
+    path('printer_action/', printer_action, name='printer_action'),
+    path('printers_user/', printers_user, name='printers_user'),
+    path('orders_user/', orders_user, name='orders_user'),
+    path('management/', management, name='management'),
+    path('printing/', printing, name='printing'),
+    path('api/choose_printer/<int:printer_id>/', choose_printer, name='choose_printer'),
+    path('api/add_model/<int:printer_id>/', add_3d_model, name='add_3d_model'),
+    path('api/order_detail/<int:order_id>/', order_detail, name='order_detail'),
+    path('submit_model/', submit_model, name='submit_model'),
+    path('contact/', contact, name='contact'),
+    path('update_order/<int:order_id>/', update_order_view, name='update_order'),
+    path('profile/', profile_view, name='profile'),
+    path('chat/', chat_view, name='chat'),
+    path('chat/send_message/<int:dialog_id>/', send_message, name='send_message'),
+    path('add/<int:printer_id>/', add_3d_model, name='add_3d_model'),
+    path('order/<int:order_id>/', order_detail, name='order_detail'),
+    path('view_gcode/<int:pk>/', view_gcode, name='view_gcode'),
+    path('upload/<int:printer_id>/', add_3d_model, name='add_3d_model'),
+    path('order/<int:order_id>/', order_detail, name='order_detail'),
+    path('gcode/<int:order_id>/', view_gcode, name='view_gcode'),
+    path('send_to_printer/<int:order_id>/', send_to_printer, name='send_to_printer'),
+    path('chat/', chat_view, name='chat'),
+    path('get_messages/<int:dialog_id>/', get_messages, name='get_messages'),
+
+
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

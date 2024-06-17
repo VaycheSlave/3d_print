@@ -1,0 +1,144 @@
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+    <title>Добавление принтера</title>
+ <style>
+    button {
+    display: block;
+    margin: auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item {
+            margin-right: 20px;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: #ccc;
+        }
+
+        .user-info span {
+            margin-right: 10px;
+        }
+
+        .logout-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 2px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            font-size: 21px; /* Set text size to 21px */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px; /* Set button text size */
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+        <a href="#" class="logo">Добавление принтера</a>
+        <nav class="nav">
+             <button onclick="window.location.href='{% url 'web' %}'">Главная</button>
+            <button onclick="window.location.href='{% url 'select_printer' %}'">Принтеры</button>
+            <button onclick="window.location.href='{% url 'orders' %}'">Заказы</button>
+
+        </nav>
+        <div class="user-info">
+            <li><a href="#">ID: {{ user.username }}</a></li>
+               <li> <a href="{% url 'users:logout' %}?next={% url 'web' %}" class="logout-button">Выход</a></li>
+        </div>
+    </header>
+
+
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Добавить</button>
+  </form>
+
+</body>
+</html>

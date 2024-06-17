@@ -1,0 +1,54 @@
+{% load static %}
+{% include 'header.html' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="tab">
+            <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+            <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+            <a href="{% url 'management' %}" class="tablinks">Управление</a>
+            <a href="{% url 'printing' %}" class="tablinks">Инструкция</a>
+            <a href="{% url 'chat' %}" class="tablinks">Чаты</a>
+        </div>
+    </div>
+    <div class="content">
+        {% block content %}
+        <div id="Orders_user">
+            <h3>Заказы</h3>
+            <table id="ordersTable" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Дата загрузки</th>
+                        <th>Цена</th>
+                        <th>Кто печатал</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.upload_date }}</td>
+                        <td>{{ order.price }}</td>
+                        <td>{{ order.customer }}</td>
+
+                        <td>{{ order.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#ordersTable').DataTable();
+    });
+</script>

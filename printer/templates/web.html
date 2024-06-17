@@ -1,0 +1,145 @@
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D-печать</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        #about-us {
+            background-color: #fff;
+            padding: 50px 0;
+        }
+
+        #about-us h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        #about-us p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        #gallery {
+            padding: 50px 0;
+        }
+
+        #gallery h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        #gallery .img-fluid {
+            -webkit-transition: 0.3s ease;
+            transition: 0.3s ease;
+        }
+
+        #gallery .img-fluid:hover {
+            -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+        }
+
+        .hero-section {
+            background-image: url("{% static 'img/back_image1.png' %}");
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+        }
+
+        .hero-section h2 {
+            font-size: 42px;
+            color: #fff;
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        #map {
+            padding: 50px 0;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <section class="hero-section text-center text-white d-flex align-items-center">
+        <div class="container">
+            <h2 class="display-4">Добро пожаловать в мир 3D-печати</h2>
+            <p class="lead">Мы воплотим ваши идеи в реальность!</p>
+            <a href="#about-us" class="btn btn-primary mt-3">Узнать больше</a>
+        </div>
+    </section>
+
+    <section id="about-us">
+        <div class="container text-center">
+            <h2>О нас</h2>
+            <p>Добро пожаловать на наш веб-сайт! Мы занимаемся 3D-печатью и стремимся предоставить вам высококачественные услуги. Наша команда профессионалов готова воплотить ваши идеи в реальность с использованием современных технологий 3D-печати.</p>
+            <p>Инновации, качество и удовлетворенность клиентов - вот что делает нас лучшими в этой области. Мы стремимся к тому, чтобы каждый проект был уникальным и соответствовал вашим ожиданиям.</p>
+        </div>
+    </section>
+
+    <section id="gallery" class="container-fluid">
+        <div class="container text-center">
+            <h2>Наши проекты</h2>
+        </div>
+        <div class="row mt-4 text-center">
+            <div class="col-md-3 mb-4">
+                <img src="{% static 'img/image1.jpeg' %}" alt="Изображение 1" class="img-fluid">
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="{% static 'img/image2.jpg' %}" alt="Изображение 2" class="img-fluid">
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="{% static 'img/image3.jpeg' %}" alt="Изображение 3" class="img-fluid">
+            </div>
+            <div class="col-md-3 mb-4">
+                <img src="{% static 'img/image4.jpg' %}" alt="Изображение 4" class="img-fluid">
+            </div>
+        </div>
+    </section>
+
+    <section class="hero-section">
+        <div class="container">
+
+
+<div class="row justify-content-end">
+                <div class="col-12 col-md-6 col-xl-5 text-white">
+                    <div class="p-4 bg-dark rounded">
+                        <h2 class="mb-4"><strong>Предлагаем возможность сдачи принтера в аренду</strong></h2>
+                        <p class="lead">Также у нас на сайте вы можете сдать свой принтер нам в удаленную аренду, чтобы вы могли заработать на печати.</p>
+                        <a href="{% url 'users:register' %}" class="btn btn-outline-light mt-3">Зарегистрироваться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="map" class="text-center">
+        <div class="container">
+            <h2>Как нас найти</h2>
+            <div class="mt-4" style="width: 100%; height: 400px;">
+                <script type="text/javascript" charset="utf-8" src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A053bd947d462cc1a45aeba4070defff75501905071c0eaf68436ac9976ec698c&amp;width=100%&amp;height=400&amp;lang=ru_RU&amp;apikey=<API-ключ>"></script>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- templates/send_command.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Command</title>
+</head>
+<body>
+    <h2>Send Command to Printer</h2>
+
+    <p>Selected Printer: {{ selected_printer.name }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="command">Enter Command:</label>
+        <input type="text" name="command" required>
+        <button type="submit">Send Command</button>
+    </form>
+</body>
+</html>

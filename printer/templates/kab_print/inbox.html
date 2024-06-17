@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inbox</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Inbox</h2>
+        <ul>
+            {% for message in messages %}
+                <li>
+                    <strong>From {{ message.sender.username }}:</strong> {{ message.message }} <br>
+                    <small>{{ message.timestamp }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

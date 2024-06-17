@@ -1,0 +1,27 @@
+{% load static %}
+
+{% include 'header.html' %}
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="tab">
+            <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с вкладками</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+            <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+            <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+            <a href="{% url 'management' %}" class="tablinks">Управление</a>
+            <a href="{% url 'printing' %}" class="tablinks">Инструкция</a>
+            <a href="{% url 'chat' %}" class="tablinks">Чаты</a>
+        </div>
+    </div>
+<div class="content">
+        {% block content %}
+        <div id="Printers">
+            <h3>Программа для управления</h3>
+     <p>Для того чтобы добавить свой принтер на сайт, вам нужно скачать программу, установить и войти в систему под своими учетными данными. Подключить принтер к компьютеру через шнур.</p>
+                <p>Подключите принтер к компьютеру через COM-порт, чтобы программа смогла его обнаружить и добавить на сайт.</p>
+                <button class="btn" onclick="window.location.href='~/static/fails/OneFile.zip'">Скачать программу</button>
+</div>
+    {% endblock %}

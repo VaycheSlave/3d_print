@@ -1,0 +1,211 @@
+    {% load static %}
+
+{% include 'header.html' %}
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="tab">
+            <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с вкладками</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+            <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+            <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+            <a href="{% url 'management' %}" class="tablinks">Управление</a>
+            <a href="{% url 'printing' %}" class="tablinks">Инструкция</a>
+            <a href="{% url 'chat' %}" class="tablinks">Чаты</a>
+        </div>
+    </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View GCode</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+
+
+        .stats {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+<body>
+    <div id="viewer"></div>
+
+
+
+<button id="sendToPrinter" data-order-id="{{ order.id }}">Отправить на печать</button>
+<div class="stats">
+    <h2>Model Statistics</h2>
+    <p>Volume: <span id="volume">0</span> mm³</p>
+    <p>Dimensions: <span id="dimensions">0 x 0 x 0</span> mm</p>
+ <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+</div>
+<script>
+ChatGPT + Midjourney, [15.06.2024 19:44]
+Чтобы повернуть модель на 90 градусов вправо по оси Y, можно воспользоваться свойством **rotation** у объекта THREE.Line.
+
+А именно, после создания объекта `line` нужно применить поворот. Добавьте следующую строку кода:
+
+```javascript
+line.rotation.y = Math.PI / 2; // Поворот на 90 градусов по оси Y
+```
+
+Вот полный пример с этим изменением:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="viewer"></div>
+    <div>
+        <h2>Model Statistics</h2>
+        <p id="volume"></p>
+        <p id="dimensions"></p>
+    </div>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Initialize Three.js scene
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('viewer').appendChild(renderer.domElement);
+
+        // Add orbit controls
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+        controls.enableZoom = true;
+
+        // Add grid helper
+        var size = 300;
+        var divisions = 50;
+        var gridHelper = new THREE.GridHelper(size, divisions);
+        scene.add(gridHelper);
+
+        // Add axis helper
+        var axesHelper = new THREE.AxesHelper(100);
+        scene.add(axesHelper);
+
+        // Load the GCode file
+var loader = new THREE.FileLoader();
+loader.load('{{ order.model_file.url }}', function (data) {
+    var lines = data.split('\n');
+    var material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    var geometry = new THREE.BufferGeometry();
+    var vertices = [];
+    var x = 0, y = 0, z = 0;
+    var maxX = 0, maxY = 0, maxZ = 0;
+    var minX = Infinity, minY = Infinity, minZ = Infinity;
+
+    var totalPrintTime = 0; // Variable to accumulate total print time
+
+    // Parse GCode
+    lines.forEach(function (line) {
+        if (line.startsWith('G')) {
+            var tokens = line.split(' ');
+            tokens.forEach(function (token) {
+                if (token.startsWith('X')) x = parseFloat(token.substring(1));
+                if (token.startsWith('Y')) y = parseFloat(token.substring(1));
+                if (token.startsWith('Z')) z = parseFloat(token.substring(1));
+            });
+            vertices.push(x, y, z);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+            maxZ = Math.max(maxZ, z);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            minZ = Math.min(minZ, z);
+        }
+        if (line.startsWith(';')) {
+            if (line.includes('TIME:')) {
+                var timeMatch = line.match(/TIME:(\d+)/);
+                if (timeMatch) {
+                    totalPrintTime += parseInt(timeMatch[1], 10);
+                }
+            }
+        }
+    });
+
+    // Adjust vertices to align model on the grid
+    for (var i = 0; i < vertices.length; i += 3) {
+        vertices[i + 2] -= minZ; // Align Z axis to be above grid
+    }
+
+    // Create BufferGeometry
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    var line = new THREE.Line(geometry, material);
+
+    // Поворот модели на заданное количество градусов по оси X
+    var rotationDegrees = 270; // Укажите количество градусов
+    line.rotation.x = THREE.Math.degToRad(rotationDegrees);
+
+    // Add the line to the scene
+    scene.add(line);
+
+    // Update model statistics
+    var volume = ((maxX - minX) * (maxY - minY) * (maxZ - minZ)).toFixed(2);
+    document.getElementById('volume').innerText = `Volume: ${volume}`;
+    document.getElementById('dimensions').innerText =
+        `Dimensions: ${(maxX - minX).toFixed(2)} x ${(maxY - minY).toFixed(2)} x ${(maxZ - minZ).toFixed(2)}`;
+
+    // Center the camera
+    var centerX = (maxX + minX) / 2;
+    var centerY = (maxY + minY) / 2;
+    var centerZ = (maxZ + minZ) / 2;
+
+    // Adjust camera position and look at the center of the model
+    camera.position.set(centerX, centerY + 200, centerZ + 200); // Elevate camera for better perspective
+    camera.lookAt(centerX, centerY, centerZ);
+    controls.target.set(centerX, centerY, centerZ);
+    controls.update();
+});
+
+
+        // Animation loop
+        var animate = function () {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>

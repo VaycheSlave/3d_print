@@ -1,0 +1,120 @@
+{% load static %}
+
+{% include 'header.html' %}
+
+<!-- Подключение DataTables JS и CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="tab">
+            <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница с вкладками</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+            <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+            <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+            <a href="{% url 'management' %}" class="tablinks">Управление</a>
+            <a href="{% url 'printing' %}" class="tablinks">Инструкция</a>
+            <a href="{% url 'chat' %}" class="tablinks">Чаты</a>
+        </div>
+    </div>
+    <div class="content">
+        {% block content %}
+        <div id="Printers">
+            <h3>Принтеры</h3>
+
+            <h4>Принтеры пользователя</h4>
+            <table id="userPrintersTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Бренд</th>
+                        <th>Модель</th>
+                        <th>Размеры</th>
+                        <th>Город</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for printer in user_printers %}
+                    <tr class="printerRow" data-url="https://{{  printer.ip_address }}">
+                        <td>{{ printer.brand }}</td>
+                        <td>{{ printer.model }}</td>
+                        <td>{{ printer.build_volume }}</td>
+                        <td>{{ printer.city }}</td>
+                        <td class="status">{{ printer.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h4>Доступные принтеры для печати</h4>
+            <table id="allPrintersTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Бренд</th>
+                        <th>Модель</th>
+                        <th>Размеры</th>
+                        <th>Город</th>
+                        <th>Статус</th>
+                        <th>Печать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for printer in all_printers %}
+                    <tr class="printerRow" data-url="https://{{  printer.ip_address }}">
+                        <td>{{ printer.brand }}</td>
+                        <td>{{ printer.model }}</td>
+                        <td>{{ printer.build_volume }}</td>
+                        <td>{{ printer.city }}</td>
+                        <td class="status">{{ printer.status }}</td>
+                        <td>
+                            <form action="{% url 'choose_printer' printer.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="com_port" value="{{ printer.com_port }}">
+                                <input type="hidden" name="ip_address" value="{{ printer.ip_address }}">
+                                <button type="submit" class="btn btn-primary">Выбрать</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function () {
+    $('#userPrintersTable').DataTable();
+    $('#allPrintersTable').DataTable();
+
+    let timerId = setInterval(() => {
+        $('.printerRow').each(function (index) {
+            let url = $(this).data('url')
+            let row = this;
+            fetch(url, {
+                method: 'HEAD'
+            }).then(response => {
+                if (response.ok) {
+                    $(row).children('.status').html('Ожидает')
+                } else {
+                    $(row).children('.status').html('Недоступен')
+                }
+            }).catch(error => {
+                $(row).children('.status').html('Недоступен')
+                console.error('Произошла ошибка при проверке доступности адреса:', error);
+            });
+        })
+    }, 20);
+
+
+});
+</script>
+

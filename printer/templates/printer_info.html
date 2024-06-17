@@ -1,0 +1,153 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printer Info</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/printer.css' %}">
+    <style>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 2px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            font-size: 21px; /* Set text size to 30px */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button, .logout-button {
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px; /* Set button text size */
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .logout-button {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h2>
+        Список принтеров
+        <div>
+            <button onclick="window.location.href='{% url 'select_printer' %}'">Принтеры</button>
+            <button onclick="window.location.href='{% url 'orders' %}'">Заказы</button>
+            <button onclick="window.location.href='{% url 'add_3d_printer' %}'">Добавить принтер</button>
+            <a href="{% url 'users:logout' %}?next={% url 'web' %}" class="logout-button">Выход</a>
+        </div>
+    </h2>
+<script>
+        function executeCommand(command) {
+            var xhr = new XMLHttpRequest();
+            var form = new FormData();
+            form.append("command", command);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("status").innerHTML = "Задача выполнена успешно.";
+                    } else {
+                        document.getElementById("status").innerHTML = "Ошибка: " + xhr.responseText;
+                    }
+                }
+            };
+
+            xhr.open("POST", "/control_printer/", true);
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            xhr.send(form);
+
+            return false;  // Чтобы предотвратить перезагрузку страницы
+        }
+    </script>
+
+
+<!-- templates/printer_info.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printer Info</title>
+</head>
+<body>
+
+
+    <ul>
+        <li>ID: {{ selected_printer.id }}</li>
+        <li>Name: {{ selected_printer.model }}</li>
+        <!-- Add other details as needed -->
+    </ul>
+    <a href="{% url 'send-command' selected_printer.id %}">Send Command to Printer</a>
+</body>
+</html>
+
+    <form onsubmit="return false;">
+        <ul class="command-list">
+        <button onclick="executeCommand('G28')">G28</button>
+        <button onclick="executeCommand('Сдвиг каретки на 10мм влево по X')">Сдвиг каретки на 10мм влево по X</button>
+        <button onclick="executeCommand('Сдвиг каретки на 10мм вправо по X')">Сдвиг каретки на 10мм вправо по X</button>
+        <button onclick="executeCommand('Сдвиг стола на 10мм влево по Y')">Сдвиг стола на 10мм назад по Y</button>
+        <button onclick="executeCommand('Сдвиг стола на 10мм вправо по Y')">Сдвиг стола на 10мм вперед по Y</button>
+        <button onclick="executeCommand('Сдвиг подъема оси на 10мм влево по Z')">Сдвиг подъема оси на 10мм вниз по Z</button>
+        <button onclick="executeCommand('Сдвиг подъема оси на 10мм вправо по Z')">Сдвиг подъема оси на 10мм вверх по Z</button>
+        </ul>
+        <label for="extruder_heat">Прогрев экструдера:</label>
+        <input type="range" id="extruder_heat" name="extruder_heat" min="0" max="260" step="1">
+        <br>
+
+        <button onclick="executeCommand('Применить')">Применить</button>
+        <button onclick="executeCommand('Остановить выполнение текущей задачи')">Остановить выполнение текущей задачи</button>
+        <button onclick="executeCommand('Запуск действия')">Запуск действия</button>
+    </form>
+
+    <h1>Thermals</h1>
+    <ul>
+        {% for thermal in thermals_data %}
+            <li>{{ thermal.name }}: {{ thermal.temperature }}°C</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Jobs</h1>
+    <ul>
+        {% for job in jobs_data %}
+            <li>{{ job.name }} - Status: {{ job.status }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

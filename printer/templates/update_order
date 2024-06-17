@@ -1,0 +1,326 @@
+{% load static %}
+{% include 'header.html' %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D-печать</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Style */
+        .navbar {
+            background-color: #343a40;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar.navbar-light .navbar-brand {
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+        }
+
+        .navbar a:hover {
+            color: #FF4500;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)), url("{% static 'img/hero-bg.jpg' %}") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 100px 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 56px;
+            margin: 0;
+        }
+
+        .hero-section p {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .hero-section .btn-primary {
+            background-color: #FF4500;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+        }
+
+        .hero-section .btn-primary:hover {
+            background-color: #e03e00;
+        }
+
+        /* About Us Section */
+        #about-us {
+            background-color: #fff;
+            padding: 50px 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.9)), url("{% static 'img/aboutus-bg.jpg' %}");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        #about-us h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        #about-us p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* Gallery Section */
+        #gallery {
+            background-color: #f8f9fa;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        #gallery h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        #gallery .card {
+            border: none;
+            overflow: hidden;
+            transition: transform .3s ease-in-out;
+            margin-bottom: 30px;
+        }
+
+        #gallery .card img {
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        #gallery .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Services Section */
+        .services-section {
+            background: #343a40;
+            color: white;
+            padding: 60px 0;
+        }
+
+        .services-section h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .service-block {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .service-block i {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #FF4500;
+        }
+
+        .service-block h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .service-block:hover {
+            background: rgba(255, 69, 0, 0.1);
+            cursor: pointer;
+            border-radius: 10px;
+            transform: scale(1.05);
+        }
+
+        / Rental Section /
+        .rental-section {
+            background-image: url("{% static 'img/rental-bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            padding: 50px 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .rental-section h2 {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .rental-section p {
+            font-size: 18px;
+        }
+
+        .rental-section .btn {
+            margin: 10px;
+            padding: 15px 30px;
+        }
+
+
+        / Map Section /
+        #map {
+            padding: 50px 0;
+            background-color: #f4f4f9;
+        }
+
+        #map h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">3D-печать</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about-us">О нас</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Галерея</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#map">Как нас найти</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section d-flex align-items-center">
+        <div class="container">
+            <h1 data-aos="fade-up">Добро пожаловать в мир 3D-печати</h1>
+            <p class="lead" data-aos="fade-up" data-aos-delay="200">Мы воплотим ваши идеи в реальность!</p>
+            <a href="#contact" class="btn btn-primary mt-3" data-aos="fade-up" data-aos-delay="400">Связаться с нами</a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about-us" data-aos="fade-up">
+        <div class="container text-center">
+            <h2>О нас</h2>
+            <p>Мы занимаемся 3D-печатью и стремимся предоставить вам высококачественные услуги. Наша команда профессионалов готова воплотить ваши идеи в реальность с использованием современных технологий 3D-печати.</p>
+            <p>Инновации, качество и удовлетворенность клиентов - вот что делает нас лучшими в этой области. Мы стремимся к тому, чтобы каждый проект был уникальным и соответствовал вашим ожиданиям.</p>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" data-aos="fade-up">
+        <div class="container">
+            <h2>Наши проекты</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card" data-aos="zoom-in">
+                        <img src="{% static 'img/image1.jpeg' %}" alt="Проект 1">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" data-aos="zoom-in" data-aos-delay="100">
+                        <img src="{% static 'img/image2.jpg' %}" alt="Проект 2">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" data-aos="zoom-in" data-aos-delay="200">
+                        <img src="{% static 'img/image3.jpeg' %}" alt="Проект 3">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card" data-aos="zoom-in" data-aos-delay="300">
+                        <img src="{% static 'img/image4.jpg' %}" alt="Проект 4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section" data-aos="fade-up">
+        <div class="container">
+            <h2>Наши услуги</h2>
+            <div class="row">
+                <div class="col-md-4 service-block" data-aos="fade-up">
+                    <i class="fas fa-print"></i>
+                    <h3>3D-печать</h3>
+                    <p>Высококачественная 3D-печать для любых нужд.</p>
+                </div>
+                <div class="col-md-4 service-block" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Проектирование</h3>
+                    <p>Проектирование и моделирование 3D-объектов.</p>
+                </div>
+                <div class="col-md-4 service-block" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-recycle"></i>
+                    <h3>Сдача в аренду</h3>
+                    <p>Сдача вашего принтера на печать в аренду.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- Map Section -->
+    <section id="map" class="text-center">
+        <div class="container">
+            <h2 data-aos="fade-up">Как нас найти</h2>
+            <div class="mt-4" style="width: 100%; height: 400px;" data-aos="fade-up" data-aos-delay="200">
+                <script type="text/javascript" charset="utf-8" src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A053bd947d462cc1a45aeba4070defff75501905071c0eaf68436ac9976ec698c&amp;width=100%&amp;height=400&amp;lang=ru_RU&amp;apikey=<API-ключ>"></script>
+            </div>
+        </div>
+    </section>
+    <!-- Контент главной страницы -->
+    <section id="contact" class="bg-light py-5">
+        <div class="container text-center">
+            <h2>Свяжитесь с нами</h2>
+            <p>Если у вас есть вопросы или предложения - пишите нам, мы всегда рады сотрудничеству!</p>
+            <form method="post" action="{% url 'web' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+            </form>
+        </div>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false,
+        });
+    </script>
+</body>
+</html>

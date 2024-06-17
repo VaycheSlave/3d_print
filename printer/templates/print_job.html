@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>Отправить на печать</title>
+</head>
+<body>
+
+<h2>Отправить STL файл на печать</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить на печать</button>
+</form>
+
+</body>
+</html>

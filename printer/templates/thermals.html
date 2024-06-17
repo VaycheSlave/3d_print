@@ -1,0 +1,27 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
+
+    <!-- Example: Include a CSS file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/extra-classes.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/combined.css' %}">
+
+    <!-- Example: Include a JavaScript file -->
+    <script src="{% static 'js/polyfill-min.js' %}"></script>
+    <script src="{% static 'js/app-min.js' %}"></script>
+    <script src="{% static 'js/angular-locale_en.js' %}"></script>
+    <script src="{% static 'js/polyfill-min.js' %}"></script>
+</head>
+<body>
+    {% if control_page_content %}
+        {{ control_page_content|safe }}
+    {% else %}
+        <p>Error fetching control page content.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.control-panel {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+}
+
+/* Стили для кнопок управления */
+.controls button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controls button:hover {
+    background-color: #2980b9;
+}
+
+/* Стили для секции перемещения по осям */
+.movement {
+    margin-bottom: 20px;
+}
+
+.movement p {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.movement button {
+    width: 48%;
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+/* Стили для отображения статуса */
+.status {
+    text-align: center;
+}
+
+#print-status {
+    font-weight: bold;
+    color: #555;
+}

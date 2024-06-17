@@ -1,0 +1,119 @@
+{% load static %}
+{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="tab">
+            <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+            <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+            <a href="{% url 'management' %}" class="tablinks">Управление</a>
+            <a href="{% url 'printing' %}" class="tablinks">Инструкция</a>
+            <a href="{% url 'chat' %}" class="tablinks">Чаты</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div id="dialogs">
+            <h2>Чаты</h2>
+
+            <ul>
+                {% for dialog, username in dialogs %}
+                    <li>
+                        <a href="#" class="dialog-link" data-userName="{{ username }}"  data-id="{{ dialog.id }}">
+                            {{ username }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="chat">
+            <h2 id="ChatWhit">Чат</h2>
+            <div id="messages"></div>
+            <form id="messageForm" method="post" action="send_message">
+                {% csrf_token %}
+                <textarea name="message" id="message" rows="3"></textarea>
+                <input hidden id="Dialog_id" name=Dialog_id" value="{{ dialog.id }}">
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+        <script>
+            var currentDialogId = null;
+            $(document).ready(function() {
+                function loadMessages(dialogId) {
+                    $.get("{% url 'get_messages' 0 %}".replace('0', dialogId), function(data) {
+                        var messagesDiv = $('#messages');
+                        messagesDiv.empty();
+                        data.messages.forEach(function(message) {
+                            var msg = `<div><strong>${message.sender}:</strong> ${message.message} <small>${message.timestamp}</small></div>`;
+
+                            messagesDiv.append(msg);
+                        });
+                    }).fail(function(){
+                        alert("Failed to load messages");
+                        console.error("Error loading messages");
+                    });
+                }
+
+                $('.dialog-link').click(function(e) {
+                    e.preventDefault();
+                    var dialogId = $(this).data('id');
+                    currentDialogId = dialogId;
+
+                    let LabelChat = $('#ChatWhit');
+                    let username = $(this).data('username');
+                    LabelChat.html(`Чат с ${username}`)
+
+                    loadMessages(dialogId);
+                    $('#messageForm').attr('action', "{% url 'send_message' 0 %}".replace('0', dialogId));
+                    clearInterval(window.messageInterval);
+                    window.messageInterval = setInterval(function() {
+                        loadMessages(dialogId);
+                    }, 5000);
+                });
+
+                $('#messageForm').submit(function (e) {
+                    e.preventDefault();
+                    let form = $(this);
+                    $.ajax({
+                        type: 'POST',
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function (data) {
+                            if (data.status === 'success') {
+                                loadMessages(currentDialogId);
+                                form[0].reset();
+                            } else {
+                                console.error("Ошибка в отправке:", data.errors);
+                            }
+                        },
+                        error: function () {
+                            // Обработка ошибки
+                            alert("Ошибка в отправке");
+                            console.error("Ошибка в отправке");
+                        }
+                    });
+                });
+            });
+
+            function ShowUsers()
+            {
+
+            }
+
+        </script>
+    </div>
+</div>
+</body>
+</html>

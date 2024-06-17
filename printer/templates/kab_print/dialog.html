@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dialog</title>
+</head>
+<body>
+    <h1>Dialog with {{ recipient.username }}</h1>
+    <div id="chat-box">
+        {% for message in messages %}
+            <p><strong>{{ message.sender.username }}:</strong> {{ message.message }}</p>
+        {% endfor %}
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+    <a href="{% url 'chat' %}">Back to chat list</a>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add 3D Printer</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 50px; /* Примерный отступ сверху */
+        }
+
+        .success-message {
+            margin-top: 20px; /* Отступ между сообщением и кнопкой */
+            color: green;
+        }
+
+        .return-button {
+            margin-top: 20px; /* Отступ перед кнопкой */
+        }
+    </style>
+</head>
+<body>
+    <h2>Add 3D Printer</h2>
+    <p class="success-message">Принтер успешно добавлен</p>
+    <form action="{% url 'printerapp:web' %}" method="get" class="return-button">
+        <button type="submit">Вернуться на главную страницу</button>
+    </form>
+</body>
+</html>

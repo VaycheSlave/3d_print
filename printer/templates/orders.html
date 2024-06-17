@@ -1,0 +1,240 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+        }
+        header {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .nav {
+            display: flex;
+            gap: 10px;
+        }
+        .nav button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav button:hover, button[type="button"]:hover {
+            background-color: #e00070;
+        }
+        .user-info {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .user-info a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .sortable th {
+            cursor: pointer;
+        }
+        .sortable th.asc::after {
+            content: " \25B4"; /* Up arrow */
+        }
+        .sortable th.desc::after {
+            content: " \25BE"; /* Down arrow */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background: #f8f9fa;
+        }
+        button {
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-edit {
+            background: #ffc107;
+            color: white;
+            border: none;
+        }
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a href="web" class="logo">Список заказов</a>
+    <nav class="nav">
+        <button onclick="window.location.href='{% url 'web' %}'">Главная</button>
+        <button onclick="window.location.href='{% url 'select_printer' %}'">Принтеры</button>
+        <button onclick="window.location.href='{% url 'kab_print' %}'">Кабинет печатника</button>
+    </nav>
+    <div class="user-info">
+        <li><a href="#">ID: {{ user.username }}</a></li>
+        <li><a href="{% url 'users:logout' %}?next={% url 'web
+
+ChatGPT + Midjourney, [15.06.2024 20:18]
+' %}" class="logout-button">Выход</a></li>
+    </div>
+</header>
+<div class="content">
+    <h2>Принтеры</h2>
+    <table class="sortable" id="ordersTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Номер заказа</th>
+                <th onclick="sortTable(1)">Дата создания</th>
+                <th onclick="sortTable(2)">Пользователь</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.upload_date }}</td>
+                <td>{{ order.user.username }}</td>
+                <td>
+                    <button class="btn-edit" onclick="editOrderDetails('{{ order.id }}')">Изменить</button>
+                    <div id="myModal{{ order.id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('{{ order.id }}')">×</span>
+                            <p>Номер заказа: {{ order.id }}</p>
+                            <p>Пользователь: {{ order.user.username }}</p>
+                            <p>Дата создания: {{ order.upload_date }}</p>
+
+                            <form id="updateForm{{ order.id }}" method="POST" action="{% url 'update_order' order.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                                <p>Стоимость: <input type="text" name="price" value="{{ order.price }}"> руб</p>
+                                <p>Статус:
+                                    <select name="status">
+                                        <option value="Готов" {% if order.status == "Готов" %} selected {% endif %}>Готов</option>
+                                        <option value="Ожидает оплату" {% if order.status == "Ожидает оплату" %} selected {% endif %}>Ожидает оплату</option>
+                                        <option value="Ожидает печать" {% if order.status == "Ожидает печать" %} selected {% endif %}>Ожидает печать</option>
+                                        <option value="Печатается" {% if order.status == "Печатается" %} selected {% endif %}>Печатается</option>
+                                    </select>
+                                </p>
+                                <button type="button" onclick="submitUpdateForm('{{ order.id }}')">Сохранить</button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function sortTable(columnIndex) {
+        var table = document.getElementById("ordersTable");
+        var rows = Array.from(table.rows).slice(1);
+        var isAsc = table.rows[0].cells[columnIndex].classList.toggle("asc");
+
+        rows.sort(function (rowA, rowB) {
+            var cellA = rowA.cells[columnIndex].innerText;
+            var cellB = rowB.cells[columnIndex].innerText;
+
+            if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
+                cellA = new Date(cellA);
+                cellB = new Date(cellB);
+            }
+
+            return (cellA > cellB ? 1 : cellA < cellB ? -1 : 0) * (isAsc ? 1 : -1);
+        });
+
+        rows.forEach(function (row) {
+            table.tBodies[0].appendChild(row);
+        });
+
+        table.rows[0].cells[columnIndex].classList.toggle("desc", !isAsc);
+    }
+
+    function editOrderDetails(orderId) {
+        var modal = document.getElementById('myModal' + orderId);
+        modal.style.display = "block";
+    }
+
+    function closeModal(orderId) {
+        var modal = document.getElementById('myModal' + orderId);
+        modal.style.display = "none";
+    }
+
+    function submitUpdateForm(orderId) {
+        var form = document.getElementById('updateForm' + orderId);
+        form.submit();
+    }
+</script>
+</body>
+</html>

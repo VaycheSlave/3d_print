@@ -1,0 +1,46 @@
+{% load static %}
+<html>
+<head>
+    <title>Управление принтером</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/control.css' %}">
+    <script src="{% static 'js/control.js' %}"></script>
+</head>
+<body>
+    <h1>Управление принтером</h1>
+
+    <form onsubmit="return false;">
+        <ul class="command-list">
+            <button onclick="executeCommand('G28')">G28</button>
+            <button onclick="executeCommand('Сдвиг каретки на 10мм влево по X')">Сдвиг каретки на 10мм влево по X</button>
+            <button onclick="executeCommand('Сдвиг каретки на 10мм вправо по X')">Сдвиг каретки на 10мм вправо по X</button>
+            <button onclick="executeCommand('Сдвиг стола на 10мм влево по Y')">Сдвиг стола на 10мм влево по Y</button>
+            <button onclick="executeCommand('Сдвиг стола на 10мм вправо по Y')">Сдвиг стола на 10мм вправо по Y</button>
+            <button onclick="executeCommand('Сдвиг подъема оси на 10мм влево по Z')">Сдвиг подъема оси на 10мм влево по Z</button>
+            <button onclick="executeCommand('Сдвиг подъема оси на 10мм вправо по Z')">Сдвиг подъема оси на 10мм вправо по Z</button>
+        </ul>
+        <label for="extruder_heat">Прогрев экструдера:</label>
+        <input type="range" id="extruder_heat" name="extruder_heat" min="0" max="260" step="1">
+        <br>
+
+        <button onclick="executeCommand('Применить')">Применить</button>
+        <button onclick="executeCommand('Остановить выполнение текущей задачи')">Остановить выполнение текущей задачи</button>
+        <button onclick="executeCommand('Запуск действия')">Запуск действия</button>
+    </form>
+
+    <h1>Thermals</h1>
+    <ul>
+        {% for thermal in thermals_data %}
+            <li>{{ thermal.name }}: {{ thermal.temperature }}°C</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Jobs</h1>
+    <ul>
+        {% for job in jobs_data %}
+            <li>{{ job.name }} - Status: {{ job.status }}</li>
+        {% endfor %}
+    </ul>
+
+    <div id="status"></div>
+</body>
+</html>

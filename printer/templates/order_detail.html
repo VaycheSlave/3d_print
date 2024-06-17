@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали заказа</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+</head>
+
+
+<body>
+    {% include 'header.html' %}
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="tab">
+                <a href="{% url 'printers_user' %}" class="tablinks">Принтеры</a>
+                <a href="{% url 'orders_user' %}" class="tablinks">Заказы</a>
+                <a href="{% url 'management' %}" class="tablinks">Управление</a>
+
+            </div>
+        </div>
+
+        <div class="content">
+            {% block content %}
+            <div id="Printers">
+                <h2>Детали заказа #{{ order.id }}</h2>
+                <p>Пользователь: {{ order.user.username }}</p>
+                <p>Принтер: {{ order.printer.brand }} {{ order.printer.model }}</p>
+                <p>Дата загрузки: {{ order.upload_date }}</p>
+                <p>Статус: {{ order.status }}</p>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
